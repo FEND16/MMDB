@@ -57,12 +57,15 @@ button {
   height: 4em; }
 
 .movie-list {
+  display: flex;
+  flex-direction: column-reverse;
   height: auto; }
 
 .movie-card {
   height: 10em;
   width: 35em;
   background: #CB22D7;
-  color: white; }
+  color: white;
+  margin: 1rem; }
 
 /*# sourceMappingURL=main.css.map */

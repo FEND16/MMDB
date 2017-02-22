@@ -70,6 +70,8 @@ button {
 
 //Section for movies to be shown.
 .movie-list {
+  display: flex;
+  flex-direction: column-reverse;
   height:auto;
 }
 .movie-card {
@@ -77,4 +79,5 @@ button {
   width: 35em;
   background:$purple;
   color:white;
+  margin:1rem;
 }

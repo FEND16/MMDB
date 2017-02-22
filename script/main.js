@@ -1,9 +1,15 @@
 //MMDB
 
 
-// Im using Module pattern
+/*Im using Module pattern combined with factory pattern. I wanted to seperate
+the Constructor and prototypes from the other application functions to get a more
+comprehendable code structure. What the object inherits is the function-prototypes
+that processes its own information. The returned functions are functions that operate
+on the entire list of objects. 
+*/
 //Module
-var magnusMovieDatabase = (() => {
+var magnusMovieDatabase = (function() {
+  //Private Array of Movie-objects.
   var movieList = [
     {
       title: 'Bond',
@@ -41,38 +47,56 @@ var magnusMovieDatabase = (() => {
       year:2013,
       genres:['Horror','Sci-fi'],
       ratings:[3,2,2]
-
     }
-
   ];
 
-  return {
-    //Constructor.
-    Movie: function(title, year, genres, ratings){
-    this.title = title;
-    this.year = year;
-    this.genres = genres.split(' ');
-    this.ratings = ratings.split('');
+  //Private Factory object.
+  var Movie = {
+
+    //Constructor prototype.
+    create: function(title, year, genres, ratings){
+      var newMovie = Object.create(this);
+      newMovie.title = title;
+      newMovie.year = year;
+      newMovie.genres  = [genres];
+      newMovie.ratings = [ratings];
+      return newMovie;
     },
 
-    //Adding new object movie to MovieList-array.
-    addMovieToDataBase: (movie) => {
-      movieList.push(movie);
+    //Prototypes
+    calcThisAverage
+    rateMovie:function(rating){
+      this.ratings.push(rating);
+      console.log(this.ratings);
     },
+    sayLog:function(){
+      console.log(`hej jag är ${this.title}`);
+    }
+  };
+
+  return {
+    //returns Movie object with all its properties so that it can be accesed through namespace.
+    Movie:Movie,
 
     //Getting input from form and creating new movie-object, pushing it to array.
-    getInputFromForm: () => {
+    getInputFromForm: function() {
       var titleInput = document.getElementById('title').value;
       var yearInput = document.getElementById('year').value;
       var genresInput = document.getElementById('genres').value;
       var ratingsInput = document.getElementById('ratings').value;
 
-      var newMovie = new magnusMovieDatabase.Movie(titleInput, yearInput, genresInput, ratingsInput);
-      magnusMovieDatabase.addMovieToDataBase(newMovie);
+      var createdMovie = magnusMovieDatabase.Movie.create(titleInput, yearInput, genresInput, ratingsInput);
+      magnusMovieDatabase.addMovieToDataBase(createdMovie);
+
       magnusMovieDatabase.listAllMoviesToInterface();
 
       console.log(movieList);
     },
+
+    addMovieToDataBase: function(movie) {
+      movieList.push(movie);
+    },
+
     //List all movies to interface.
     listAllMoviesToInterface: () => {
       var section = document.getElementsByClassName('movie-list')[0];
@@ -83,11 +107,32 @@ var magnusMovieDatabase = (() => {
             <p>Title:${movieList[i].title}</p>
             <p>Release Year:${movieList[i].year}</p>
             <p>Genres:${movieList[i].genres}</p>
-            <p>Ratings:${movieList[i].ratings}</p>
+            <p>Ratings:${magnusMovieDatabase.calcAverageRating(i)}</p>
           </div>
         </article>`;
       }
       section.innerHTML = movieHtml;
+    },
+    //Calculates average rating for movie object.
+    calcAverageRating:function(i){
+        var sum = 0;
+        var arr = movieList[i].ratings || this.ratings;
+        for(let j = 0; j<arr.length; j++){
+          sum += arr[j];
+        }
+        return sum/arr.length;
+    },
+
+    addProtoToExistingMovies: function(){
+      var movieListProtos = movieList.map(function(obj){
+        magnusMovieDatabase.Movie.create(obj);
+        console.log(movieListProtos);
+      });
+    },
+
+    //Get top rated movie.
+    getTopRatedMovie: function(){
+
     }
   };
 })();
@@ -100,9 +145,12 @@ var button = document.getElementById('go');
 
 button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
 
+//magnusMovieDatabase.addProtoToExistingMovies();
+var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
 
+console.log(halo);
+
+halo.rateMovie(7);
 
 //console.log(magnusMovieDatabase.listAllMovies());
-
-
-//end obj
+//console.log(magnusMovieDatabase.Movie.avarageRating());
