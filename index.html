@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Chewy|Yantramanav" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>MMDB</title>
+  </head>
+  <body>
+    <header>
+      <h1>Magnus Movie Data Base</h1>
+      <nav>
+        <a href="#">All Movies</a>
+        <a href="#">Horror</a>
+        <a href="#">Top Rated</a>
+      </nav>
 
+    </header>
+    <main>
+
+
+      <form class="mmdb-form" action="index.html" method="post">
+        <label for="title">Title</label>
+        <input id="title"type="text" name="title" value="">
+        <label for="year">Release year</label>
+        <input id="year"type="text" name="year" value="">
+        <label for="genres">Genres</label>
+        <input id="genres"type="text" name="genres" value="">
+        <label for="ratings">Ratings</label>
+        <input id="ratings"type="text" name="ratings" value="">
+        <button id="go" type="button" name="button">GO!</button>
+      </form>
+      <section class="movie-list">
+
+      </section>
+    </main>
+  <script src="script/main.js" type="text/javascript"></script>
+  </body>
+</html>
