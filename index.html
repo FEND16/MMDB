@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/main.css" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Chewy|Yantramanav" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Chewy|Oxygen" rel="stylesheet">
     <meta charset="utf-8">
     <title>MMDB</title>
   </head>
@@ -10,29 +10,49 @@
     <header>
       <h1>Magnus Movie Data Base</h1>
       <nav>
-        <a id="all-movies"href="#">All Movies</a>
-        <a id="horror"href="#">Horror</a>
-        <a id="action"href="#">Action</a>
-        <a id="Crime"href="#">Crime</a>
-        <a href="#">Top Rated</a>
-
+        <a class="nav-a"id="all-movies"href="#">All Movies</a>
+        <a class="nav-a"id="horror"href="#">Horror</a>
+        <a class="nav-a"id="action"href="#">Action</a>
+        <a class="nav-a"id="Crime"href="#">Crime</a>
+        <a class="nav-a"id="top"href="#">Top Rated</a>
+        <a class="nav-a"id="worst" href="#">Worst Rated</a>
       </nav>
 
     </header>
     <main>
+      <section class="forms-section">
+        <form class="add-form search-rate" action="index.html" method="post">
 
+          <label for="search-title">Title</label>
+          <input id="search-title"type="text" name="" value="">
+          <label for="Year">Year</label>
+          <input id="year" type="text" name="" value="">
+          <label for="">Genre</label>
+          <input id="genre" type="text" name="" value="">
+          <button id="search" type="button" name="button">Search</button>
+        </form>
+        <form class="rate-form" action="index.html" method="post">
+          <label for="rate-title">Rate title</label>
+          <input id="rate-title"type="text" name="" value="">
+          <label for="rate">Your rating</label>
+          <input id="rate" type="text" name="" value="">
+          <button id="rate-button"type="button" name="button">Rate</button>
+        </form>
+        <form class="add-form" action="index.html" method="post">
+          <h2>Add Movie</h2>
+          <label for="title">Title</label>
+          <input id="title"type="text" name="title" value="">
+          <label for="year">Release year</label>
+          <input id="year"type="text" name="year" value="">
+          <label for="genres">Genres</label>
+          <input id="genres"type="text" name="genres" value="">
+          <label for="ratings">Ratings</label>
+          <input id="ratings"type="text" name="ratings" value="">
+          <button id="go" type="button" name="button">Add Movie</button>
+        </form>
 
-      <form class="mmdb-form" action="index.html" method="post">
-        <label for="title">Title</label>
-        <input id="title"type="text" name="title" value="">
-        <label for="year">Release year</label>
-        <input id="year"type="text" name="year" value="">
-        <label for="genres">Genres</label>
-        <input id="genres"type="text" name="genres" value="">
-        <label for="ratings">Ratings</label>
-        <input id="ratings"type="text" name="ratings" value="">
-        <button id="go" type="button" name="button">GO!</button>
-      </form>
+      </section>
+
       <section class="movie-list">
 
       </section>

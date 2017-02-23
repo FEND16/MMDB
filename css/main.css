@@ -1,14 +1,18 @@
 body {
   margin: 0;
-  background: #FB9696; }
+  background: white; }
 
-h1, h2, h3, h4, label, a {
+h1, h2, h3, h4 {
   font-family: 'Chewy', cursive;
   text-decoration: none; }
 
-p {
+label, a, p {
   margin: 0;
-  font-family: 'Yantramanav', sans-serif; }
+  font-family: 'Oxygen', sans-serif;
+  text-decoration: none; }
+
+.nav-a {
+  color: #EA2BA2; }
 
 header {
   display: flex;
@@ -18,7 +22,7 @@ header {
   position: fixed;
   top: 0;
   height: 4em;
-  background: black;
+  background: white;
   width: 100%;
   color: #EA2BA2; }
 
@@ -30,32 +34,58 @@ nav {
 main {
   margin-top: 4em;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start; }
+  align-items: center; }
 
-.mmdb-form {
+.forms-section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  align-items: flex-start;
+  background: white; }
+
+.add-form {
   display: flex;
   flex-direction: column;
-  height: 40em;
+  height: auto;
   width: 20em;
-  background: teal; }
+  background: white; }
+  .add-form input {
+    display: block;
+    float: right;
+    height: 2rem;
+    font-size: 2rem; }
+  .add-form button {
+    height: 2rem;
+    font-size: 1rem; }
+  .add-form label {
+    font-size: 1em; }
 
 label {
   font-size: 2em;
-  color: white;
+  color: #EA2BA2;
   float: left;
   display: block; }
-
-input {
-  display: block;
-  float: right;
-  height: 2em;
-  font-size: 2em; }
 
 button {
   font-size: 2em;
   height: 4em; }
+
+.rate-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: auto; }
+  .rate-form label {
+    font-size: 1em; }
+  .rate-form button {
+    height: 2rem;
+    font-size: 1rem; }
+  .rate-form input {
+    height: 1rem; }
 
 .movie-list {
   display: flex;

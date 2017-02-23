@@ -4,17 +4,22 @@ $siris:#EA2BA2;
 $beige:#FB9696;
 body {
   margin:0;
-  background: $beige;
+  background: white;
 
 }
-
-h1,h2,h3,h4,label,a{
+//typography
+h1,h2,h3,h4{
   font-family: 'Chewy', cursive;
   text-decoration: none;
 }
-p {
-margin:0;
-font-family: 'Yantramanav', sans-serif;
+label,a,p {
+  margin:0;
+  font-family: 'Oxygen', sans-serif;
+  text-decoration: none;
+}
+
+.nav-a {
+  color:$siris;
 }
 
 header {
@@ -25,7 +30,7 @@ header {
   position:fixed;
   top:0;
   height: 4em;
-  background: black;
+  background: white;
   width: 100%;
   color:$siris;
 }
@@ -39,35 +44,73 @@ nav {
 main {
   margin-top: 4em;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
-//Form
-.mmdb-form {
+.forms-section {
+  display: flex;
+  flex-direction: row;
+  width:100%;
+  justify-content: space-around;
+  align-items: flex-start;
+  background: white;
+
+}
+//Form add
+.add-form {
   display: flex;
   flex-direction: column;
-  height: 40em;
+  height: auto;
   width:20em;
-  background: teal;
+  background: white;
+  & input {
+    display: block;
+    float:right;
+    height: 2rem;
+    font-size: 2rem;
+  }
+  & button {
+    height:2rem;
+    font-size: 1rem;
+  }
+  & label {
+    font-size: 1em;
+
+  }
 }
 label {
   font-size: 2em;
-  color:white;
+  color:$siris;
   float:left;
   display: block;
 }
-input {
-  display: block;
-  float:right;
-  height: 2em;
-  font-size: 2em;
-}
+
 
 button {
   font-size: 2em;
   height:4em;
 }
+//Form rate.
+
+.rate-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height:auto;
+  & label {
+    font-size: 1em;
+  }
+  & button {
+    height: 2rem;
+    font-size: 1rem;
+  }
+  & input {
+    height:1rem;
+  }
+}
+
 
 //Section for movies to be shown.
 .movie-list {
