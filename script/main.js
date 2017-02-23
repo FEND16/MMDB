@@ -15,6 +15,36 @@ var magnusMovieDatabase = (function() {
   var tempList = [];
   var oldList = [
     {
+        title:"Finding Nemo",
+        year:2003,
+        genres:["Horror"],
+        ratings:[1,5,7,4,2,7,8,9,3]
+    },
+    {
+        title:"Waterworld",
+        year:1995 ,
+        genres:["Action"],
+        ratings:[8,7,6,9,8,7,10]
+    },
+    {
+        title:"Stargate",
+        year:1994 ,
+        genres:["Action","Adventure","Sci-Fi"],
+        ratings:[10,10,10,9,8,10,8]
+    },
+    {
+        title:"Arrival",
+        year:2016 ,
+        genres:["Action","Sci-Fi"],
+        ratings:[5,7,3,7,9]
+    },
+    {
+        title:"The Brothers Lionheart",
+        year:1977 ,
+        genres:["Action","Adventure"],
+        ratings:[5,7,8,2,4,7,9]
+    },
+    {
       title: 'The Exorcist',
       year: 1973,
       genres: ['Horror','Thriller'],
@@ -78,7 +108,7 @@ var magnusMovieDatabase = (function() {
         newMovie.ratings = ratings;
       }
       else{
-        newMovie.genres  = genres.split(' ');
+        newMovie.genres  = genres.split('');
         newMovie.ratings = ratings.split('');
       }
 
@@ -87,10 +117,12 @@ var magnusMovieDatabase = (function() {
 
     //Prototypes
     calcThisAverage: function(){
-      let arr = this.ratings.reduce(function(prev,obj){
+
+      var arr = this.ratings.reduce(function(prev,obj){
         return prev + obj;
       },0);
       return (arr/this.ratings.length).toFixed(2);
+
     },
     addRating:function(rating){
       this.ratings.push(rating);
@@ -111,7 +143,7 @@ var magnusMovieDatabase = (function() {
     getInputFromForm: function() {
       var titleInput = document.getElementById('title').value;
       var yearInput = document.getElementById('year').value;
-      var genresInput = document.getElementById('genres').value.split(' ');
+      var genresInput = document.getElementById('genres').value;
       var ratingsInput = Number(document.getElementById('ratings').value);
       console.log(ratingsInput);
 
@@ -144,7 +176,7 @@ var magnusMovieDatabase = (function() {
       section.innerHTML = movieHtml;
     },
     //Adds prototypes to allready excisting array objects and creating Movie objects.
-  addProtoToExistingMovies: function(){
+    addProtoToExistingMovies: function(){
       for(var i = 0; i<oldList.length; i++){
         var title = oldList[i].title;
         var year = oldList[i].year;
@@ -159,7 +191,7 @@ var magnusMovieDatabase = (function() {
     //Gets top rated movie and adds it to interface.
     getTopRatedMovie: function(){
       var topList = movieList.reduce(function(prev, obj){
-        return prev.ratings > obj.ratings ? prev:obj;
+        return prev.calcThisAverage() > obj.calcThisAverage() ? prev:obj;
       });
       tempList = [topList];
 
@@ -168,7 +200,7 @@ var magnusMovieDatabase = (function() {
     //Returns worst rated movie and adds it to interface.
     getWorstRatedMovie: function(){
       var worstList = movieList.reduce(function(prev,obj){
-        return prev.ratings < obj.ratings ? prev:obj;
+        return prev.calcThisAverage() < obj.calcThisAverage() ? prev:obj;
       });
       tempList = [worstList];
       magnusMovieDatabase.listAllMoviesToInterface(tempList);
@@ -208,15 +240,22 @@ var genreList = movieList.map(function(obj){
       return findList;
     },
     //Get movie from form values and post list of movies returned to html.
-    getMovieFromForm:function(){
+    getMovieFromForm:()=>{
       var argument;
-      if(document.getElementById('search-title').value===''){
-        argument = Number(document.getElementById('year').value);
+      if(document.getElementById('search-title').value==='' &&
+       document.getElementById('year').value===''){
+
       }
-      else if(document.getElementById('year').value===''){
-        argument = document.getElementById('search-title').value;
+      else{
+        if(document.getElementById('search-title').value===''){
+          argument = Number(document.getElementById('year').value);
+        }
+        else{
+          argument = document.getElementById('search-title').value;
+        }
+        return magnusMovieDatabase.listAllMoviesToInterface(magnusMovieDatabase.findMovie(argument));
       }
-      magnusMovieDatabase.listAllMoviesToInterface(magnusMovieDatabase.findMovie(argument));
+
     },
 
     getRatingFromForm:function(){
@@ -230,16 +269,18 @@ var genreList = movieList.map(function(obj){
 })();
 //Runs at init of application.
 magnusMovieDatabase.addProtoToExistingMovies();
-magnusMovieDatabase.listAllMoviesToInterface();
+//magnusMovieDatabase.listAllMoviesToInterface();
 
 //Adding eventlistener to button for adding movieobject.
+var searchButton = document.getElementById('search-button');
 var button = document.getElementById('go');
 var all = document.getElementById('all-movies');
 var horrorButton = document.getElementById('horror');
 var actionButton = document.getElementById('action');
 var topratedButton = document.getElementById('top');
 var worstRatedButton = document.getElementById('worst');
-var searchButton = document.getElementById('search');
+
+searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromForm);
 
 button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
 all.addEventListener('click', function(){magnusMovieDatabase.listAllMoviesToInterface();});
@@ -247,9 +288,8 @@ horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFr
 actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
 topratedButton.addEventListener('click',function(){magnusMovieDatabase.getTopRatedMovie();});
 worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.getWorstRatedMovie();});
-searchButton = document.addEventListener('click',function(){magnusMovieDatabase.getMovieFromForm();});
 
-magnusMovieDatabase.findMovie(1995);
+
 //magnusMovieDatabase.addProtoToExistingMovies();
 //var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
 
