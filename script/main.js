@@ -5,7 +5,7 @@
 the Constructor and prototypes from the other application functions to get a more
 comprehendable code structure. What the object inherits is the function-prototypes
 that processes its own information. The returned functions are functions that operate
-on the entire list of objects. 
+on the entire list of objects.
 */
 //Module
 var magnusMovieDatabase = (function() {
@@ -32,7 +32,7 @@ var magnusMovieDatabase = (function() {
     {
       title:'Django Unchained',
       year:2012,
-      genres:['Action','Drama','Western'],
+      genres:['Drama','Western'],
       ratings:[7,8,9]
 
     },
@@ -50,7 +50,7 @@ var magnusMovieDatabase = (function() {
     }
   ];
 
-  //Private Factory object.
+  //Private Factory object./////////////////////////////////////////////
   var Movie = {
 
     //Constructor prototype.
@@ -58,13 +58,18 @@ var magnusMovieDatabase = (function() {
       var newMovie = Object.create(this);
       newMovie.title = title;
       newMovie.year = year;
-      newMovie.genres  = [genres];
-      newMovie.ratings = [ratings];
+      newMovie.genres  = genres.split(' ');
+      newMovie.ratings = ratings.split(' ');
       return newMovie;
     },
 
     //Prototypes
-    calcThisAverage
+    calcThisAverage: function(){
+      let arr = this.ratings.reduce(function(prev,obj){
+        return prev + obj;
+      },0);
+      return arr/this.ratings.length;
+    },
     rateMovie:function(rating){
       this.ratings.push(rating);
       console.log(this.ratings);
@@ -73,7 +78,7 @@ var magnusMovieDatabase = (function() {
       console.log(`hej jag är ${this.title}`);
     }
   };
-
+//Returned functions for app./////////////////////////////////////////////////////////////////////////////
   return {
     //returns Movie object with all its properties so that it can be accesed through namespace.
     Movie:Movie,
@@ -104,10 +109,16 @@ var magnusMovieDatabase = (function() {
       for(let i = 0 ; i < movieList.length; i++){
         movieHtml += `<article class="movie-card">
           <div class="movie-text">
-            <p>Title:${movieList[i].title}</p>
+            <h3>Title:${movieList[i].title}</h3>
             <p>Release Year:${movieList[i].year}</p>
             <p>Genres:${movieList[i].genres}</p>
             <p>Ratings:${magnusMovieDatabase.calcAverageRating(i)}</p>
+          </div>
+          <div class="movie-buttons">
+            <label for="rating">Rate Movie</lable>
+            <input class="rating-input" name="rating" type="text" id="rate-id" placeholder="1-10"></input>
+            <button class="card-button" id="rate">Rate</button>
+            <button class="card-button" id="delete">Delete</button>
           </div>
         </article>`;
       }
@@ -123,17 +134,58 @@ var magnusMovieDatabase = (function() {
         return sum/arr.length;
     },
 
-    addProtoToExistingMovies: function(){
-      var movieListProtos = movieList.map(function(obj){
-        magnusMovieDatabase.Movie.create(obj);
-        console.log(movieListProtos);
-      });
-    },
+    /*
+  addProtoToExistingMovies: function(){
+      var newList = [];
+
+      for(var i = 0; i<movieList.length; i++){
+        var title = movieList[i].title;
+        var year = movieList[i].year;
+        var genres = movieList[i].genres.toString();
+        var ratings = movieList[i].ratings.toString();
+        var newObj = magnusMovieDatabase.Movie.create(title,year,genres,ratings);
+        newList.push(newObj);
+      }
+        console.log(newList);
+    },  */
+
+
 
     //Get top rated movie.
     getTopRatedMovie: function(){
+      var topList = movieList.reduce(function(prev, obj){
+        return prev.calcThisAverage() > obj.calcThisAverage() ? prev.name:obj.name;
+      });
+    },
+    //Get all movies from a specifik genre.
+    getMoviesFromGenre: function(genre){
+      var localMovieList = [...movieList];
+      var finalGenres = [];
+      for(var i=0; i<localMovieList.length;i++){
+        var genreList = localMovieList[i].genres;
+        for(var j = 0; j<genreList.length;j++){
+          if(genreList[j]===genre){
+            finalGenres.push(localMovieList[i]);
+          }
+        }
+      }
+      return finalGenres;
+      /*
+var genreList = movieList.map(function(obj){
+        return obj.genres.filter(function(obj){
+          return obj === 'Action';
+        });
+      }).map(function(obj){
+        return obj.title;
+      });
+      return genreList;
+    }*/
 
+    },
+    accesMovieList:function(){
+      return movieList;
     }
+
   };
 })();
 
@@ -148,9 +200,17 @@ button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
 //magnusMovieDatabase.addProtoToExistingMovies();
 var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
 
-console.log(halo);
+//console.log(halo);
 
-halo.rateMovie(7);
+//halo.rateMovie(7);
 
+//console.log(halo.calcThisAverage());
+
+//console.log(magnusMovieDatabase.getTopRatedMovie());
 //console.log(magnusMovieDatabase.listAllMovies());
 //console.log(magnusMovieDatabase.Movie.avarageRating());
+//console.log(magnusMovieDatabase.getMoviesFromGenre('Action'));
+//console.log(magnusMovieDatabase.getTopRatedMovie());
+//magnusMovieDatabase.addProtoToExistingMovies();
+
+//console.log(array);
