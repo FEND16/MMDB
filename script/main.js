@@ -10,7 +10,10 @@ on the entire list of objects.
 //Module
 var magnusMovieDatabase = (function() {
   //Private Array of Movie-objects.
-  var movieList = [
+
+  var movieList = [];
+  var finalGenres = [];
+  var oldList = [
     {
       title: 'Bond',
       year:1957,
@@ -58,8 +61,15 @@ var magnusMovieDatabase = (function() {
       var newMovie = Object.create(this);
       newMovie.title = title;
       newMovie.year = year;
-      newMovie.genres  = genres.split(' ');
-      newMovie.ratings = ratings.split(' ');
+      if(Array.isArray(genres)){
+        newMovie.genres = genres;
+        newMovie.ratings = ratings;
+      }
+      else{
+        newMovie.genres  = genres.split(' ');
+        newMovie.ratings = ratings.split(' ');
+      }
+
       return newMovie;
     },
 
@@ -94,25 +104,25 @@ var magnusMovieDatabase = (function() {
       magnusMovieDatabase.addMovieToDataBase(createdMovie);
 
       magnusMovieDatabase.listAllMoviesToInterface();
-
-      console.log(movieList);
     },
 
     addMovieToDataBase: function(movie) {
       movieList.push(movie);
     },
 
-    //List all movies to interface.
-    listAllMoviesToInterface: () => {
+    //List movies to interface with passed array.
+    listAllMoviesToInterface: (list) => {
+      if(list===undefined){list=movieList;}
+
       var section = document.getElementsByClassName('movie-list')[0];
       var movieHtml = '';
-      for(let i = 0 ; i < movieList.length; i++){
+      for(let i = 0 ; i < list.length; i++){
         movieHtml += `<article class="movie-card">
           <div class="movie-text">
-            <h3>Title:${movieList[i].title}</h3>
-            <p>Release Year:${movieList[i].year}</p>
-            <p>Genres:${movieList[i].genres}</p>
-            <p>Ratings:${magnusMovieDatabase.calcAverageRating(i)}</p>
+            <h3>Title:${list[i].title}</h3>
+            <p>Release Year:${list[i].year}</p>
+            <p>Genres:${list[i].genres}</p>
+            <p>Ratings:${list[i].calcThisAverage()}</p>
           </div>
           <div class="movie-buttons">
             <label for="rating">Rate Movie</lable>
@@ -125,51 +135,52 @@ var magnusMovieDatabase = (function() {
       section.innerHTML = movieHtml;
     },
     //Calculates average rating for movie object.
-    calcAverageRating:function(i){
+    calcAverageRating:function(i,list){
         var sum = 0;
-        var arr = movieList[i].ratings || this.ratings;
+        var arr = list[i].ratings || this.ratings;
         for(let j = 0; j<arr.length; j++){
           sum += arr[j];
         }
         return sum/arr.length;
     },
 
-    /*
+
   addProtoToExistingMovies: function(){
-      var newList = [];
 
-      for(var i = 0; i<movieList.length; i++){
-        var title = movieList[i].title;
-        var year = movieList[i].year;
-        var genres = movieList[i].genres.toString();
-        var ratings = movieList[i].ratings.toString();
+
+      for(var i = 0; i<oldList.length; i++){
+        var title = oldList[i].title;
+        var year = oldList[i].year;
+        var genres = oldList[i].genres;
+        var ratings = oldList[i].ratings;
         var newObj = magnusMovieDatabase.Movie.create(title,year,genres,ratings);
-        newList.push(newObj);
+        movieList.push(newObj);
       }
-        console.log(newList);
-    },  */
-
-
+      console.log(movieList);
+    },
 
     //Get top rated movie.
     getTopRatedMovie: function(){
       var topList = movieList.reduce(function(prev, obj){
-        return prev.calcThisAverage() > obj.calcThisAverage() ? prev.name:obj.name;
+        return prev.ratings > obj.ratings ? prev:obj;
       });
+      return topList;
     },
     //Get all movies from a specifik genre.
     getMoviesFromGenre: function(genre){
       var localMovieList = [...movieList];
-      var finalGenres = [];
+      var localGenres = [];
       for(var i=0; i<localMovieList.length;i++){
         var genreList = localMovieList[i].genres;
         for(var j = 0; j<genreList.length;j++){
           if(genreList[j]===genre){
-            finalGenres.push(localMovieList[i]);
+            localGenres.push(localMovieList[i]);
           }
         }
       }
-      return finalGenres;
+      finalGenres = localGenres;
+      console.log(finalGenres);
+      magnusMovieDatabase.listAllMoviesToInterface(finalGenres);
       /*
 var genreList = movieList.map(function(obj){
         return obj.genres.filter(function(obj){
@@ -188,17 +199,22 @@ var genreList = movieList.map(function(obj){
 
   };
 })();
-
-
+//Runs at init of application.
+magnusMovieDatabase.addProtoToExistingMovies();
 magnusMovieDatabase.listAllMoviesToInterface();
 
 //Adding eventlistener to button for adding movieobject.
 var button = document.getElementById('go');
+var all = document.getElementById('all-movies');
+var horrorButton = document.getElementById('horror');
+var actionButton = document.getElementById('action');
 
 button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
-
+all.addEventListener('click', function(){magnusMovieDatabase.listAllMoviesToInterface();});
+horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Horror');});
+actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
 //magnusMovieDatabase.addProtoToExistingMovies();
-var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
+//var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
 
 //console.log(halo);
 
@@ -210,7 +226,7 @@ var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
 //console.log(magnusMovieDatabase.listAllMovies());
 //console.log(magnusMovieDatabase.Movie.avarageRating());
 //console.log(magnusMovieDatabase.getMoviesFromGenre('Action'));
-//console.log(magnusMovieDatabase.getTopRatedMovie());
-//magnusMovieDatabase.addProtoToExistingMovies();
+console.log(magnusMovieDatabase.getTopRatedMovie());
+
 
 //console.log(array);
