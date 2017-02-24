@@ -9,6 +9,7 @@ on the entire list of objects.
 */
 //Module
 var magnusMovieDatabase = (function() {
+
   //Private Array of Movie-objects.
 
   var movieList = [];
@@ -108,18 +109,17 @@ var magnusMovieDatabase = (function() {
         newMovie.ratings = ratings;
       }
       else{
-        newMovie.genres  = genres.split('');
+        newMovie.genres  = genres.split(' ');
         newMovie.ratings = ratings.split('');
+        console.log(newMovie.ratings);
       }
-
       return newMovie;
     },
 
     //Prototypes
     calcThisAverage: function(){
-
       var arr = this.ratings.reduce(function(prev,obj){
-        return prev + obj;
+        return Number(prev) + Number(obj);
       },0);
       return (arr/this.ratings.length).toFixed(2);
 
@@ -144,12 +144,9 @@ var magnusMovieDatabase = (function() {
       var titleInput = document.getElementById('title').value;
       var yearInput = document.getElementById('year').value;
       var genresInput = document.getElementById('genres').value;
-      var ratingsInput = Number(document.getElementById('ratings').value);
-      console.log(ratingsInput);
-
+      var ratingsInput = document.getElementById('ratings').value;
       var createdMovie = magnusMovieDatabase.Movie.create(titleInput, yearInput, genresInput, ratingsInput);
       magnusMovieDatabase.addMovieToDataBase(createdMovie);
-
       magnusMovieDatabase.listAllMoviesToInterface();
     },
 
@@ -185,7 +182,6 @@ var magnusMovieDatabase = (function() {
         var newObj = magnusMovieDatabase.Movie.create(title,year,genres,ratings);
         movieList.push(newObj);
       }
-      console.log(movieList);
     },
 
     //Gets top rated movie and adds it to interface.
@@ -207,18 +203,16 @@ var magnusMovieDatabase = (function() {
     },
     //Get all movies from a specifik genre.
     getMoviesFromGenre: function(genre){
-      var localMovieList = [...movieList];
       var localGenres = [];
-      for(var i=0; i<localMovieList.length;i++){
-        var genreList = localMovieList[i].genres;
+      for(var i=0; i<movieList.length;i++){
+        var genreList = movieList[i].genres;
         for(var j = 0; j<genreList.length;j++){
           if(genreList[j]===genre){
-            localGenres.push(localMovieList[i]);
+            localGenres.push(movieList[i]);
           }
         }
       }
       tempList = localGenres;
-      console.log(tempList);
       magnusMovieDatabase.listAllMoviesToInterface(tempList);
       /*
 var genreList = movieList.map(function(obj){
@@ -235,15 +229,15 @@ var genreList = movieList.map(function(obj){
     //Find Movie from argument input.
     findMovie:function(value){
       var findList = movieList.filter(function(elem){
-        return elem.title===value || elem.year ===value;
+        return elem.title.toUpperCase() === value.toUpperCase() || elem.year === value;
       });
       return findList;
     },
     //Get movie from form values and post list of movies returned to html.
     getMovieFromForm:()=>{
       var argument;
-      if(document.getElementById('search-title').value==='' &&
-       document.getElementById('year').value===''){
+      if(document.getElementById('search-title').value === '' &&
+       document.getElementById('year').value === ''){
 
       }
       else{
@@ -257,9 +251,13 @@ var genreList = movieList.map(function(obj){
       }
 
     },
-
-    getRatingFromForm:function(){
-
+    //Gets input from rate-form and sets that rating to specified titles ratings array.
+    setRatingFromForm:function(){
+      var title = document.getElementById('rate-title').value;
+      var rating = Number(document.getElementById('rate').value);
+      var movieToRate = magnusMovieDatabase.findMovie(title);
+      movieToRate[0].addRating(rating);
+      magnusMovieDatabase.listAllMoviesToInterface(movieToRate);
     },
     accesMovieList:function(){
       return movieList;
@@ -279,7 +277,7 @@ var horrorButton = document.getElementById('horror');
 var actionButton = document.getElementById('action');
 var topratedButton = document.getElementById('top');
 var worstRatedButton = document.getElementById('worst');
-
+var rate = document.getElementById('rate-button');
 searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromForm);
 
 button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
@@ -288,22 +286,4 @@ horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFr
 actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
 topratedButton.addEventListener('click',function(){magnusMovieDatabase.getTopRatedMovie();});
 worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.getWorstRatedMovie();});
-
-
-//magnusMovieDatabase.addProtoToExistingMovies();
-//var halo = magnusMovieDatabase.Movie.create('Halo',2668,'kalle',5);
-
-//console.log(halo);
-
-//halo.rateMovie(7);
-
-//console.log(halo.calcThisAverage());
-
-//console.log(magnusMovieDatabase.getTopRatedMovie());
-//console.log(magnusMovieDatabase.listAllMovies());
-//console.log(magnusMovieDatabase.Movie.avarageRating());
-//console.log(magnusMovieDatabase.getMoviesFromGenre('Action'));
-
-
-
-//console.log(array);
+rate.addEventListener('click',magnusMovieDatabase.setRatingFromForm);
