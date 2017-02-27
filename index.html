@@ -2,13 +2,13 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/main.css" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Chewy|Oxygen" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Contrail+One|Oxygen" rel="stylesheet">
     <meta charset="utf-8">
     <title>MMDB</title>
   </head>
   <body>
     <header>
-      <h1 id="magnus">Magnus Movie Data Base</h1>
+      <h1 id="logo">MMDB</h1>
       <nav>
         <a class="nav-a"id="all-movies"href="#">All Movies</a>
         <a class="nav-a"id="horror"href="#">Horror</a>
@@ -20,18 +20,24 @@
 
     </header>
     <main>
+      <h1 id="magnus">Magnus Movie Data Base</h1>
       <section class="forms-section">
-        <form class="add-form search-rate" action="index.html" method="post">
 
-          <label for="titlesearch">Title</label>
-          <input id="search-title"type="text" name="" value="">
-          <label for="Year">Year</label>
-          <input id="year" type="text" name="" value="">
-          <label for="">Genre</label>
-          <input id="genre" type="text" name="" value="">
-          <button id="search-button" type="button" name="button">Search</button>
+
+        <form class="search-form" action="index.html" method="post">
+          <div class="search-div">
+            <label for="titlesearch"></label>
+            <input id="search-title"type="text" name="" value="" placeholder="Title, Release Year, Genre">
+            <button id="search-button" type="button" name="button">Search</button>
+          </div>
+          <h2 id="add-movie">Add Movie</h2>
         </form>
+
+
+      </section>
+      <section class="forms-section">
         <form class="rate-form" action="index.html" method="post">
+          <h2>Rate Movie</h2>
           <label for="rate-title">Rate title</label>
           <input id="rate-title"type="text" name="" value="">
           <label for="rate">Your rating</label>
@@ -50,10 +56,9 @@
           <input id="ratings"type="text" name="ratings" value="">
           <button id="go" type="button" name="button">Add Movie</button>
         </form>
-
       </section>
-
       <section class="movie-list">
+
 
       </section>
     </main>
