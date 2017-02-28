@@ -1,4 +1,4 @@
-//MMDB
+//MMDB-- Link to GitHub-repo: https://github.com/magnusohrstrom/MMDB
 
 
 /*Im using Module pattern combined with factory pattern for constructor.
