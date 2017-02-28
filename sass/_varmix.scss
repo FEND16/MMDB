@@ -17,7 +17,7 @@ $main-margin: 24px;
 
 /*------------- Breakpoints mixin*/
 
-$breakpoints: ( 'xxsmall': ( min-width: 360px),'xsmall': ( min-width: 375px), 'small': ( min-width: 464px), 'medium': ( min-width: 704px), 'large': ( min-width: 900px), 'xlarge': ( min-width: 1200px));
+$breakpoints: ( 'xxsmall': ( min-width: 360px),'xsmall': ( min-width: 375px), 'small': ( max-width: 464px), 'medium': ( min-width: 704px), 'large': ( max-width: 900px), 'xlarge': ( min-width: 1200px));
 @mixin breakpoint($name) {
     @if map-has-key($breakpoints, $name) {
         @media #{inspect(map-get($breakpoints, $name))} {

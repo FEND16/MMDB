@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="css/main.css" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Contrail+One|Oxygen" rel="stylesheet">
-    <meta charset="utf-8">
+<link rel="stylesheet" href="css/main.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Cabin+Sketch|Oxygen" rel="stylesheet">
+<meta charset="utf-8">
+
     <title>MMDB</title>
   </head>
   <body>
@@ -26,36 +27,47 @@
 
         <form class="search-form" action="index.html" method="post">
           <div class="search-div">
-            <label for="titlesearch"></label>
             <input id="search-title"type="text" name="" value="" placeholder="Title, Release Year, Genre">
             <button id="search-button" type="button" name="button">Search</button>
           </div>
-          <h2 id="add-movie">Add Movie</h2>
+          <div class="links">
+            <div class="rate-wrapper">
+              <h2 id="rate-movie">Rate Movie</h2>
+              <div class="rate-form" action="index.html" method="post">
+
+                <label for="rate-title">Rate title</label>
+                <input id="rate-title"type="text" name="" value="">
+                <label for="rate">Your rating</label>
+                <input id="rate" type="text" name="" value="">
+                <button id="rate-button"type="button" name="button">Rate</button>
+              </div>
+            </div>
+
+          <div class="add-container">
+            <h2 id="add-movie">Add Movie</h2>
+
+            <div class="add-form" action="index.html" method="post">
+
+              <label for="title">Title</label>
+              <input id="title"type="text" name="title" value="">
+              <label for="year">Release year</label>
+              <input id="year"type="text" name="year" value="">
+              <label for="genres">Genres</label>
+              <input id="genres"type="text" name="genres" value="">
+              <label for="ratings">Ratings</label>
+              <input id="ratings"type="text" name="ratings" value="">
+              <button id="go" type="button" name="button">Add Movie</button>
+
+            </div>
+          </div>
+          </div>
         </form>
 
 
       </section>
       <section class="forms-section">
-        <form class="rate-form" action="index.html" method="post">
-          <h2>Rate Movie</h2>
-          <label for="rate-title">Rate title</label>
-          <input id="rate-title"type="text" name="" value="">
-          <label for="rate">Your rating</label>
-          <input id="rate" type="text" name="" value="">
-          <button id="rate-button"type="button" name="button">Rate</button>
-        </form>
-        <form class="add-form" action="index.html" method="post">
-          <h2>Add Movie</h2>
-          <label for="title">Title</label>
-          <input id="title"type="text" name="title" value="">
-          <label for="year">Release year</label>
-          <input id="year"type="text" name="year" value="">
-          <label for="genres">Genres</label>
-          <input id="genres"type="text" name="genres" value="">
-          <label for="ratings">Ratings</label>
-          <input id="ratings"type="text" name="ratings" value="">
-          <button id="go" type="button" name="button">Add Movie</button>
-        </form>
+
+
       </section>
       <section class="movie-list">
 
