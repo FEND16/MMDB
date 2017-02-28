@@ -261,6 +261,9 @@ button {
   animation-duration: 1s;
   animation-fill-mode: forwards;
   animation-iteration-count: 1; }
+  @media (max-width: 464px) {
+    .movie-list {
+      width: 100vw; } }
 
 .movie-card {
   display: flex;
@@ -292,6 +295,9 @@ button {
   animation-duration: 1s;
   animation-fill-mode: forwards;
   animation-iteration-count: 1; }
+  @media (max-width: 464px) {
+    .movie-card {
+      width: 80%; } }
   .movie-card p {
     margin-bottom: 1em; }
 

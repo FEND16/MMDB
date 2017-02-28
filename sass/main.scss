@@ -180,6 +180,9 @@ button {
   flex-wrap: wrap-reverse;
   height:auto;
   @include animation(fade-in,1s,forwards,1);
+  @include breakpoint(small){
+    width:100vw;
+  };
 }
 .movie-card {
   display: flex;
@@ -191,6 +194,9 @@ button {
   word-wrap: normal;
   background: linear-gradient($purple,$siris);
     @include animation(fade-in,1s,forwards,1);
+    @include breakpoint(small){
+      width: 80%;
+    };
 
   & p {
     margin-bottom: 1em;
