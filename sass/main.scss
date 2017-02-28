@@ -1,21 +1,43 @@
 @import "varmix";
 
+
+
 //variables Sass
 $purple:#CB22D7;
 $siris:#EA2BA2;
 $beige:#FB9696;
+
+//Animations
+@include keyframe(fade-in){
+  from {
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+};
+
+@include keyframe(fade-out) {
+    form{
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+};
+
 body {
   margin:0;
   background: white;
 
 }
 //typography
-h1,h2{
+h1,h2,h3{
   font-family: 'Cabin Sketch', cursive;
   color:black;
   text-decoration: none;
 }
-h3,h4,label,a,p {
+h4,label,a,p {
 
   font-family: 'Oxygen', sans-serif;
   text-decoration: none;
@@ -58,6 +80,7 @@ header {
   background: white;
   width: 100%;
   color:$siris;
+  @include animation(fade-in,3s,forwards,1);
 }
 nav {
   width: 50%;
@@ -95,7 +118,9 @@ input {
   justify-content: flex-start;
   height: auto;
   width:30em;
+
   &.active{
+    @include animation(fade-in, 1s, forwards, 1);
     display: flex;
   }
 
@@ -132,6 +157,7 @@ button {
   height:auto;
   text-align: left;
   margin-right: 2em;
+  @include animation(fade-in,1s,forwards,1);
   &.active {
     display: flex;
   }
@@ -149,18 +175,22 @@ button {
 .movie-list {
   display: flex;
   width: 80%;
+  justify-content: center;
+  align-items: flex-start;
   flex-wrap: wrap-reverse;
   height:auto;
+  @include animation(fade-in,1s,forwards,1);
 }
 .movie-card {
   display: flex;
   flex-direction: column;
-  height: 15em;
-  width: 15em;
+  height: 16em;
+  width: 16em;
   color:white;
   margin:1rem;
   word-wrap: normal;
   background: linear-gradient($purple,$siris);
+    @include animation(fade-in,1s,forwards,1);
 
   & p {
     margin-bottom: 1em;
@@ -244,5 +274,6 @@ margin-right: 2rem;
   };
 }
 #logo{
-
+cursor: pointer;
+color:$siris;
 }

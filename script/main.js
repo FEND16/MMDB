@@ -1,49 +1,67 @@
 //MMDB
 
 
-/*Im using Module pattern combined with factory pattern. I wanted to seperate
-the Constructor and prototypes from the other application functions to get a more
-comprehendable code structure. What the object inherits is the function-prototypes
-that processes its own information. The returned functions are functions that operate
+/*Im using Module pattern combined with factory pattern for constructor.
+I wanted to seperate the constructor with its prototypes from the other application functions
+to get a more comprehendable code structure.
+Therefore I put the factory-constructor "Movie" in the module
+before the returned objekt. It is then passed ass the property "Movie" to the returned objekt.
+Movies prototype-functions operates on the objects own values and the returned functions operate
 on the entire list of objects.
+
+The Module pattern provides a strict namespace that hides all variables and funktions from
+the globalscope. The risk of duplicating or overwriting varibales or functions is thus
+minimalized. The modules content can only be accessed from namepacing the module with dotation.
+The cons of this pattern is that it saves duplicates of object-functions in memory and is said to add
+debugging complexity.
+
+
+The Factory pattern doesnt need you to use the "new" keyword in creating objects
+and in some degree doesent use the "this" keyword in the same way.
+Instead a construktor method is created with the Object.create() function.
+All the objekts prototype-functions is then declared in the factory as properties instead of asigning them
+with dot-notation after the constructor is created as is the case with the constructor pattern.
+These prototypes are then used in the "application-functions" to process the objects own values.
+Thats where I make use of the prototype-chain.
+
+I think that the factory pattern is some what easier to read because everything that is
+asocieated with the object-constructor is declared inside the factory. It's "already" a
+finished version of the objekts that it creates.
 */
+
 //Module
-var magnusMovieDatabase = (function() {
+const magnusMovieDatabase = (() => {
 
   //List of Movie-objects.
-  var movieList = [];
+  let movieList = [];
   //List for temporary search results to load to interface.
-  var tempList = [];
+  let tempList = [];
   //Hardcode objects to transform to Movie-objects.
-  var oldList = [
+  const oldList = [
     {
         title: "Assassins Creed",
         year: 2016,
         genres: ["Action", "Adventure", "Fantasy"],
         ratings: [0,2,5,8,9,1,3,4,6,3]
     },
-
     {
         title: "Jason Bourne",
         year: 2016,
         genres: ["Action", "Thriller"],
         ratings: [6,6,7,8,9,2,4,3,2,6]
     },
-
     {
         title: "Waterworld",
         year: 1995,
         genres: ["Action", "Adventure", "Sci-Fi"],
         ratings: [8,9,6,5,7,8,6,7,5,9]
     },
-
     {
         title: "Blade Runner",
         year: 1982,
         genres: ["Sci-Fi", "Thriller"],
         ratings: [9,8,9,7,9,8,9,8,9]
     },
-
     {
         title: "The Big Lebowski",
         year: 1998,
@@ -131,16 +149,16 @@ var magnusMovieDatabase = (function() {
     }
   ];
 
-  //Private Factory object./////////////////////////////////////////////
+  //Private Factory object with constructor and prototype-functions./////////////////////////////////////////////
   const Movie = {
-
     //Constructor prototype.
     create: function(title, year, genres, ratings){
       var newMovie = Object.create(this);
       newMovie.title = title;
       newMovie.year = year;
 
-      //Checks if genres value is Array. This enables construktor to work with both existing objekts and creating new objekts from form.
+      //Checks if genres value is Array. This enables construktor to work with
+      //both existing objekts and creating new objekts from form.
       if(Array.isArray(genres)){
         newMovie.genres = genres;
         newMovie.ratings = ratings;
@@ -148,7 +166,6 @@ var magnusMovieDatabase = (function() {
       else{
         newMovie.genres  = genres.split(' ');
         newMovie.ratings = ratings.split('');
-        console.log(newMovie.ratings);
       }
       return newMovie;
     },
@@ -160,15 +177,12 @@ var magnusMovieDatabase = (function() {
         return Number(prev) + Number(obj);
       },0);
       return (arr/this.ratings.length).toFixed(2);
-
     },
     //Pushes rating to this objekts array "ratings".
     addRating:function(rating){
       this.ratings.push(rating);
-      console.log(this.ratings);
     }
   };
-
 
 //Returned functions for app./////////////////////////////////////////////////////////////////////////////
   return {
@@ -176,26 +190,29 @@ var magnusMovieDatabase = (function() {
     Movie:Movie,
 
     //Getting input from form and creating new movie-object, pushing it to array.
-    getInputFromForm: function() {
-      var titleInput = document.getElementById('title').value;
-      var yearInput = document.getElementById('year').value;
-      var genresInput = document.getElementById('genres').value;
-      var ratingsInput = document.getElementById('ratings').value;
-      var createdMovie = magnusMovieDatabase.Movie.create(titleInput, yearInput, genresInput, ratingsInput);
+    getInputFromForm: () => {
+      let titleInput = document.getElementById('title').value;
+      let yearInput = document.getElementById('year').value;
+      let genresInput = document.getElementById('genres').value;
+      let ratingsInput = document.getElementById('ratings').value;
+      let createdMovie = magnusMovieDatabase.Movie.create(titleInput, yearInput, genresInput, ratingsInput);
       magnusMovieDatabase.addMovieToDataBase(createdMovie);
+      magnusMovieDatabase.toggleActive('add-form');
       magnusMovieDatabase.listAllMoviesToInterface();
     },
 
-    addMovieToDataBase: function(movie) {
+    addMovieToDataBase: (movie) => {
       movieList.push(movie);
     },
 
-    //List movies to interface with passed array-argument.
+    //List movies to interface with passed array-argument. Here I use the Movieprototype
+    //.calcThisAverage to add the average rating of each object.
     listAllMoviesToInterface: (list) => {
-      if(list===undefined){list=movieList;}
-
-      var section = document.getElementsByClassName('movie-list')[0];
-      var movieHtml = '';
+      if(list===undefined){
+        list=movieList;
+      }
+      let section = document.getElementsByClassName('movie-list')[0];
+      let movieHtml = '';
       for(let i = 0 ; i < list.length; i++){
         movieHtml +=
         `<article class="movie-card">
@@ -208,7 +225,7 @@ var magnusMovieDatabase = (function() {
       section.innerHTML = movieHtml;
     },
     //Adds prototypes to allready excisting array objects and creating Movie objects.
-    addProtoToExistingMovies: function(){
+    addProtoToExistingMovies: () => {
       for(var i = 0; i<oldList.length; i++){
         var title = oldList[i].title;
         var year = oldList[i].year;
@@ -219,29 +236,28 @@ var magnusMovieDatabase = (function() {
       }
     },
 
-    //Gets top rated movie and adds it to interface.
-    getTopRatedMovie: function(){
-      tempList = movieList.reduce(function(prev, obj){
+    //Gets top rated movie and adds it to interface. Prototype used.
+    getTopRatedMovie: () => {
+      tempList = movieList.reduce((prev, obj)=>{
         return prev.calcThisAverage() > obj.calcThisAverage() ? prev:obj;
       });
       tempList=[tempList]; //= [topList];
-
       magnusMovieDatabase.listAllMoviesToInterface(tempList);
     },
-    //Returns worst rated movie and adds it to interface.
-    getWorstRatedMovie: function(){
-      tempList = movieList.reduce(function(prev,obj){
+    //Returns worst rated movie and adds it to interface. Prototype used.
+    getWorstRatedMovie: () => {
+      tempList = movieList.reduce((prev,obj)=>{
         return prev.calcThisAverage() < obj.calcThisAverage() ? prev:obj;
       });
       tempList = [tempList];
       magnusMovieDatabase.listAllMoviesToInterface(tempList);
     },
     //Get all movies from a specifik genre and then list them to html-interface.
-    getMoviesFromGenre: function(genre){
-      var localGenres = [];
-      for(var i=0; i<movieList.length;i++){
+    getMoviesFromGenre: (genre) => {
+      let localGenres = [];
+      for(let i=0; i<movieList.length;i++){
         var genreList = movieList[i].genres;
-        for(var j = 0; j<genreList.length;j++){
+        for(let j = 0; j<genreList.length;j++){
           if(genreList[j].toUpperCase()===genre.toUpperCase()){
             localGenres.push(movieList[i]);
           }
@@ -250,55 +266,54 @@ var magnusMovieDatabase = (function() {
       tempList = localGenres;
       magnusMovieDatabase.listAllMoviesToInterface(tempList);
     },
-    //Find Movie from argument input.
-    findMovie:function(value){
+    //Find Movie from argument input. Depending on if the input value is a number or string
+    //different functions will run.
+    findMovie:(value) => {
+      return (isNaN(Number(value)))
+      ? magnusMovieDatabase.findTitle(value):magnusMovieDatabase.findNumber(value);
 
-      if(isNaN(Number(value))){
-        return magnusMovieDatabase.findTitle(value);
-      }
-      else{
-        return magnusMovieDatabase.findYear(value);
-      }
     },
-
-    findTitle:function(value){
+    //finds movie by titlestring.
+    findTitle:(value) => {
       return tempList = movieList.filter(function(elem){
         return elem.title.toUpperCase() === value.toUpperCase();});
     },
-
-    findYear:function(value){
+    //Finds movie by number.
+    findNumber:(value) => {
+      return value.length < 4 ? magnusMovieDatabase.findRating(value):magnusMovieDatabase.findYear(value);
+    },
+    //Finds movie by rating. Prototype used.
+    findRating:(value) => {
+      return tempList = movieList.filter(function(elem){
+        return Math.floor(elem.calcThisAverage()) === Number(value);
+      });
+    },
+    //Finds movie by year.
+    findYear:(value) => {
        return tempList = movieList.filter(function(elem){
           return elem.year === Number(value);
         });
     },
     //Get movie from form values and post list of movies returned to html.
-    getMovieFromSearch:()=>{
-      var argument = document.getElementById('search-title').value;
-      var second = magnusMovieDatabase.findMovie(argument);
+    getMovieFromSearch:() => {
+      let argument = document.getElementById('search-title').value;
+      let second = magnusMovieDatabase.findMovie(argument);
 
-      if(second[0]===undefined){
-        magnusMovieDatabase.getMoviesFromGenre(argument);
-      }
-      else{
+      return second[0]===undefined ? magnusMovieDatabase.getMoviesFromGenre(argument):
         magnusMovieDatabase.listAllMoviesToInterface(second);
-      }
-
-
     },
     //Gets input from rate-form and sets that rating to specified titles ratings array.
+    //Prototype Movie.addRating used.
     setRatingFromForm:function(){
-      var title = document.getElementById('rate-title').value;
-      var rating = Number(document.getElementById('rate').value);
-      var movieToRate = magnusMovieDatabase.findMovie(title);
+      let title = document.getElementById('rate-title').value;
+      let rating = Number(document.getElementById('rate').value);
+      let movieToRate = magnusMovieDatabase.findMovie(title);
       movieToRate[0].addRating(rating);
+      magnusMovieDatabase.toggleActive('rate-form');
       magnusMovieDatabase.listAllMoviesToInterface(movieToRate);
     },
-
-    accesMovieList:function(){
-      return movieList;
-    },
-
-    enterKey:function(key){
+    //Enables click on search-button when enter-key is pressed.
+    enterKey:(key) => {
       key=window.event;
       if(window.event.keyCode == 13){
         document.getElementById('search-button').click();
@@ -306,46 +321,40 @@ var magnusMovieDatabase = (function() {
       }
 
     },
-    toggleActive: function(list, link){
+    //Toggles class "active" to speciefied element. Opening of forms etc.
+    toggleActive:(list) => {
       let elem = document.getElementsByClassName(list);
-
-
-      //this.classList.toggle('active');
       elem[0].classList.toggle('active');
-
+    },
+    //Runs at initiation of application to add eventlisteners and create objects-array.
+    init:() => {
+      magnusMovieDatabase.addProtoToExistingMovies();
+      let searchButton = document.getElementById('search-button');
+      let button = document.getElementById('go');
+      let all = document.getElementById('all-movies');
+      let horrorButton = document.getElementById('horror');
+      let actionButton = document.getElementById('action');
+      let topratedButton = document.getElementById('top');
+      let worstRatedButton = document.getElementById('worst');
+      let rate = document.getElementById('rate-button');
+      let input = document.getElementById('search-title');
+      let add = document.getElementById('add-movie');
+      let addRate = document.getElementById('rate-movie');
+      let crime = document.getElementById('Crime');
+      input.setAttribute('onkeypress','return magnusMovieDatabase.enterKey(event);');
+      searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromSearch);
+      addRate.addEventListener('click',function(){magnusMovieDatabase.toggleActive('rate-form');});
+      add.addEventListener('click', function(){magnusMovieDatabase.toggleActive('add-form');});
+      button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
+      all.addEventListener('click', function(){magnusMovieDatabase.listAllMoviesToInterface();});
+      horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Horror');});
+      actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
+      crime.addEventListener('click', function(){magnusMovieDatabase.getMoviesFromGenre('Crime');});
+      topratedButton.addEventListener('click',function(){magnusMovieDatabase.getTopRatedMovie();});
+      worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.getWorstRatedMovie();});
+      rate.addEventListener('click',magnusMovieDatabase.setRatingFromForm);
     }
   };
 })();
 
-(function(){
-//Runs at init of application.
-magnusMovieDatabase.addProtoToExistingMovies();
-//magnusMovieDatabase.listAllMoviesToInterface();
-
-//Adding eventlistener to button for adding movieobject.
-var searchButton = document.getElementById('search-button');
-var button = document.getElementById('go');
-var all = document.getElementById('all-movies');
-var horrorButton = document.getElementById('horror');
-var actionButton = document.getElementById('action');
-var topratedButton = document.getElementById('top');
-var worstRatedButton = document.getElementById('worst');
-var rate = document.getElementById('rate-button');
-var input = document.getElementById('search-title');
-var add = document.getElementById('add-movie');
-var addRate = document.getElementById('rate-movie');
-var crime = document.getElementById('Crime');
-input.setAttribute('onkeypress','return magnusMovieDatabase.enterKey(event);');
-searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromSearch);
-
-addRate.addEventListener('click',function(){magnusMovieDatabase.toggleActive('rate-form');});
-add.addEventListener('click', function(){magnusMovieDatabase.toggleActive('add-form');});
-button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
-all.addEventListener('click', function(){magnusMovieDatabase.listAllMoviesToInterface();});
-horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Horror');});
-actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
-crime.addEventListener('click', function(){magnusMovieDatabase.getMoviesFromGenre('Crime');});
-topratedButton.addEventListener('click',function(){magnusMovieDatabase.getTopRatedMovie();});
-worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.getWorstRatedMovie();});
-rate.addEventListener('click',magnusMovieDatabase.setRatingFromForm);
-})();
+magnusMovieDatabase.init();
