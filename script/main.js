@@ -275,8 +275,9 @@ const magnusMovieDatabase = (() => {
     },
     //finds movie by titlestring.
     findTitle:(value) => {
-      return tempList = movieList.filter(function(elem){
-        return elem.title.toUpperCase() === value.toUpperCase();});
+        return tempList = movieList.filter(function(elem){
+          return elem.title.toUpperCase().indexOf(value.toUpperCase()) !== -1;
+        });
     },
     //Finds movie by number.
     findNumber:(value) => {
@@ -356,5 +357,4 @@ const magnusMovieDatabase = (() => {
     }
   };
 })();
-
 magnusMovieDatabase.init();
