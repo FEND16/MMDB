@@ -143,10 +143,8 @@ main {
   align-items: flex-end;
   background: white; }
 
-input {
-  border-style: dashed; }
-  input:focus {
-    outline: none; }
+input:focus {
+  outline: none; }
 
 .add-form {
   display: none;
@@ -343,7 +341,14 @@ button {
 .add-wrapper {
   flex-direction: column; }
 
-#add-movie, #rate-movie {
+.genre-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: space-between; }
+
+#add-movie, #rate-movie, #genre-h2 {
   cursor: pointer;
   font-size: 2em;
   margin-right: 2rem; }

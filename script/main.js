@@ -146,6 +146,32 @@ const magnusMovieDatabase = (() => {
       year:2013,
       genres:['Horror','Sci-fi'],
       ratings:[3,2,2]
+    },
+    {
+      title: 'Casino Royale',
+      year: 2006,
+      genres: ['Action','Adventure','Thriller'],
+      ratings: [6,4,8,9,9,9,9]
+    },
+
+    {
+      title:'Star Wars: Episode VI - Return of the Jedi',
+      year: 1983,
+      genres:["Action", "Adventure", "Fantasy"],
+      ratings:[9,10,10,10,9]
+
+    },
+    {
+      title: "Fury",
+      year: 2014,
+      genres: ["Action", "Drama", "War"],
+      ratings: [8,9,9,6,7,8,9,8]
+    },
+    {
+      title: "Gladiator",
+      year: 2000,
+      genres: ["Action", "Adventure", "Drama"],
+      ratings: [10,10,10,10,10,10,10]
     }
   ];
 
@@ -181,6 +207,16 @@ const magnusMovieDatabase = (() => {
     //Pushes rating to this objekts array "ratings".
     addRating:function(rating){
       this.ratings.push(rating);
+    },
+
+    addGenre:function(genre){
+      this.genres.push(genre);
+    },
+    removeGenre:function(genre){
+      var arr = this.genres.filter(function(elem){
+        return elem.toUpperCase() !== genre.toUpperCase();
+      });
+      this.genres = arr;
     }
   };
 
@@ -297,11 +333,28 @@ const magnusMovieDatabase = (() => {
     },
     //Get movie from form values and post list of movies returned to html.
     getMovieFromSearch:() => {
-      let argument = document.getElementById('search-title').value;
-      let second = magnusMovieDatabase.findMovie(argument);
+      let title = document.getElementById('search-title').value;
+      let result = magnusMovieDatabase.findMovie(title);
 
-      return second[0]===undefined ? magnusMovieDatabase.getMoviesFromGenre(argument):
-        magnusMovieDatabase.listAllMoviesToInterface(second);
+      return result[0]===undefined ? magnusMovieDatabase.getMoviesFromGenre(title):
+        magnusMovieDatabase.listAllMoviesToInterface(result);
+    },
+
+    //Find movie and add genre to Movies array genres.
+    addGenreFromForm: ()=> {
+      let title = document.getElementById('title-genre').value;
+      let result = magnusMovieDatabase.findMovie(title);
+      let genreToAdd = document.getElementById('add-genre').value;
+      result[0].addGenre(genreToAdd);
+      magnusMovieDatabase.listAllMoviesToInterface(result);
+    },
+    //Removes genre from Movie.
+    removeGenreFromForm: ()=> {
+      let title = document.getElementById('title-genre').value;
+      let result = magnusMovieDatabase.findMovie(title);
+      let genreToRemove = document.getElementById('add-genre').value;
+      result[0].removeGenre(genreToRemove);
+      magnusMovieDatabase.listAllMoviesToInterface(result);
     },
     //Gets input from rate-form and sets that rating to specified titles ratings array.
     //Prototype Movie.addRating used.
@@ -342,6 +395,12 @@ const magnusMovieDatabase = (() => {
       let add = document.getElementById('add-movie');
       let addRate = document.getElementById('rate-movie');
       let crime = document.getElementById('Crime');
+      let genreButton = document.getElementById('genre-h2');
+      let genreAdd = document.getElementById('genre-button');
+      let genreToRemove = document.getElementById('genre-button-remove');
+      genreToRemove.addEventListener('click',magnusMovieDatabase.removeGenreFromForm);
+      genreAdd.addEventListener('click',magnusMovieDatabase.addGenreFromForm);
+      genreButton.addEventListener('click',function(){magnusMovieDatabase.toggleActive('genre-form');});
       input.setAttribute('onkeypress','return magnusMovieDatabase.enterKey(event);');
       searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromSearch);
       addRate.addEventListener('click',function(){magnusMovieDatabase.toggleActive('rate-form');});

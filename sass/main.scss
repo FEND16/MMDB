@@ -106,7 +106,7 @@ main {
 
 }
 input {
-  border-style: dashed;
+  //border-style: dashed;
   &:focus {
     outline:none;
   }
@@ -256,8 +256,15 @@ button {
 .add-wrapper {
   flex-direction: column;
 }
+.genre-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: space-between;
+}
 
-#add-movie,#rate-movie {
+#add-movie,#rate-movie, #genre-h2 {
 cursor: pointer;
 font-size: 2em;
 margin-right: 2rem;
