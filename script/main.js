@@ -39,6 +39,12 @@ const magnusMovieDatabase = (() => {
   //Hardcode objects to transform to Movie-objects.
   const oldList = [
     {
+      title: "Gladiator",
+      year: 2000,
+      genres: ["Action", "Adventure", "Drama"],
+      ratings: [10,10,10,10]
+    },
+    {
         title: "Assassins Creed",
         year: 2016,
         genres: ["Action", "Adventure", "Fantasy"],
@@ -166,12 +172,6 @@ const magnusMovieDatabase = (() => {
       year: 2014,
       genres: ["Action", "Drama", "War"],
       ratings: [8,9,9,6,7,8,9,8]
-    },
-    {
-      title: "Gladiator",
-      year: 2000,
-      genres: ["Action", "Adventure", "Drama"],
-      ratings: [10,10,10,10,10,10,10]
     }
   ];
 
@@ -190,8 +190,8 @@ const magnusMovieDatabase = (() => {
         newMovie.ratings = ratings;
       }
       else{
-        newMovie.genres  = genres.split(' ');
-        newMovie.ratings = ratings.split('');
+        newMovie.genres  = createGenresArray(genres);
+        newMovie.ratings = createRatingsArray(ratings);
       }
       return newMovie;
     },
@@ -199,25 +199,33 @@ const magnusMovieDatabase = (() => {
     //Prototypes
     //Calculates the average rating of this objekt.
     calcThisAverage: function(){
-      var arr = this.ratings.reduce(function(prev,obj){
+      let arr = this.ratings.reduce(function(prev,obj){
         return Number(prev) + Number(obj);
       },0);
-      return (arr/this.ratings.length).toFixed(2);
+      return (arr/this.ratings.length);
     },
     //Pushes rating to this objekts array "ratings".
     addRating:function(rating){
       this.ratings.push(rating);
     },
-
+    //Adds genre to movie.
     addGenre:function(genre){
       this.genres.push(genre);
     },
+    //removes Genre from movie.
     removeGenre:function(genre){
-      var arr = this.genres.filter(function(elem){
+      this.genres = this.genres.filter(function(elem){
         return elem.toUpperCase() !== genre.toUpperCase();
       });
-      this.genres = arr;
     }
+  };
+  createGenresArray = (genres) => {
+    return genres.split('').indexOf(',') === -1 ? genres.split(' '):genres.split(',');
+  };
+  createRatingsArray = (ratings) => {
+    return ratings.split('').filter(function(elem){
+      return elem !== ','&& elem !== ' ' && elem !== '.';
+    });
   };
 
 //Returned functions for app./////////////////////////////////////////////////////////////////////////////
@@ -255,7 +263,7 @@ const magnusMovieDatabase = (() => {
             <h3>${list[i].title}</h3>
             <p>Released: ${list[i].year}</p>
             <p>${list[i].genres}</p>
-            <p>Rating: ${list[i].calcThisAverage()}</p>
+            <p>Rating: ${list[i].calcThisAverage().toFixed(2)}</p>
         </article>`;
       }
       section.innerHTML = movieHtml;
@@ -383,7 +391,7 @@ const magnusMovieDatabase = (() => {
     //Runs at initiation of application to add eventlisteners and create objects-array.
     init:() => {
       magnusMovieDatabase.addProtoToExistingMovies();
-      let searchButton = document.getElementById('search-button');
+      let searchButton = document.getElementById('search-title');
       let button = document.getElementById('go');
       let all = document.getElementById('all-movies');
       let horrorButton = document.getElementById('horror');
@@ -402,7 +410,7 @@ const magnusMovieDatabase = (() => {
       genreAdd.addEventListener('click',magnusMovieDatabase.addGenreFromForm);
       genreButton.addEventListener('click',function(){magnusMovieDatabase.toggleActive('genre-form');});
       input.setAttribute('onkeypress','return magnusMovieDatabase.enterKey(event);');
-      searchButton.addEventListener('click', magnusMovieDatabase.getMovieFromSearch);
+      searchButton.addEventListener('input', magnusMovieDatabase.getMovieFromSearch);
       addRate.addEventListener('click',function(){magnusMovieDatabase.toggleActive('rate-form');});
       add.addEventListener('click', function(){magnusMovieDatabase.toggleActive('add-form');});
       button.addEventListener('click',magnusMovieDatabase.getInputFromForm);
