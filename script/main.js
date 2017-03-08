@@ -204,7 +204,7 @@ const magnusMovieDatabase = (() => {
       },0);
       return (arr/this.ratings.length);
     },
-    //Pushes rating to this objekts array "ratings".
+    //Pushes rating to this objekts array "ratings".as
     addRating:function(rating){
       this.ratings.push(rating);
     },
@@ -383,10 +383,30 @@ const magnusMovieDatabase = (() => {
       }
 
     },
+
+    sortByHighestRating: () => {
+      tempList = movieList.sort(function(prev,elem){
+        return prev.calcThisAverage()-elem.calcThisAverage();
+      });
+      magnusMovieDatabase.listAllMoviesToInterface(tempList);
+    },
+    sortByLowestRating: () => {
+      tempList = movieList.sort(function(prev, elem){
+        return elem.calcThisAverage()-prev.calcThisAverage();
+      });
+      magnusMovieDatabase.listAllMoviesToInterface(tempList);
+    },
     //Toggles class "active" to speciefied element. Opening of forms etc.
-    toggleActive:(list) => {
+    toggleActive:function(list) {
+
       let elem = document.getElementsByClassName(list);
+      let close = document.getElementsByClassName('form-toggle');
+      for (var i = 0; i < close.length; i++) {
+        close[i].classList.remove('active');
+      }
       elem[0].classList.toggle('active');
+
+
     },
     //Runs at initiation of application to add eventlisteners and create objects-array.
     init:() => {
@@ -418,8 +438,8 @@ const magnusMovieDatabase = (() => {
       horrorButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Horror');});
       actionButton.addEventListener('click',function(){magnusMovieDatabase.getMoviesFromGenre('Action');});
       crime.addEventListener('click', function(){magnusMovieDatabase.getMoviesFromGenre('Crime');});
-      topratedButton.addEventListener('click',function(){magnusMovieDatabase.getTopRatedMovie();});
-      worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.getWorstRatedMovie();});
+      topratedButton.addEventListener('click',function(){magnusMovieDatabase.sortByHighestRating();});
+      worstRatedButton.addEventListener('click',function(){magnusMovieDatabase.sortByLowestRating();});
       rate.addEventListener('click',magnusMovieDatabase.setRatingFromForm);
     }
   };
