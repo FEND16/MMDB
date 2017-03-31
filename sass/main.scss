@@ -175,7 +175,7 @@ button {
 .movie-list {
   display: flex;
   width: 80%;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap-reverse;
   height:auto;
